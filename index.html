@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LENTERA - Reporter Cilik Wawancara Kelas 6</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins & Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        reporter: {
+                            yellow: '#FFC837',
+                            red: '#FF416C',
+                            blue: '#1E3C72',
+                            darkblue: '#2A5298',
+                            light: '#F8FAFC',
+                            accent: '#00C9FF',
+                            purple: '#7C3AED'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        fredoka: ['Fredoka', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .font-fredoka {
+            font-family: 'Fredoka', cursive;
+        }
+        .pulse-live {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 65, 108, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 65, 108, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 65, 108, 0); }
+        }
+        .bg-reporter-pattern {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E3C72;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 bg-reporter-pattern flex flex-col min-h-screen selection:bg-amber-300">
+
+    <!-- Broadcast Top Bar -->
+    <div class="bg-reporter-blue text-white py-1.5 px-4 text-xs md:text-sm flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2">
+            <span class="inline-block w-3 h-3 bg-red-500 rounded-full pulse-live"></span>
+            <span class="font-bold tracking-wider uppercase text-yellow-300">MEDIA INTERAKTIF SD NEGERI 2 PENANTIAN</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <span class="hidden sm:inline"><i class="fa-solid fa-graduation-cap text-yellow-400 mr-1"></i> Bahasa Indonesia Kelas 6</span>
+            <span class="bg-reporter-red text-xs px-2 py-0.5 rounded font-bold uppercase">Bab 3</span>
+        </div>
+    </div>
+
+    <!-- Main Header & Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('beranda')">
+                <div class="w-12 h-12 bg-gradient-to-tr from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center text-slate-900 shadow-md transform rotate-3 hover:rotate-0 transition-transform">
+                    <i class="fa-solid fa-video text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black font-fredoka text-reporter-blue tracking-tight leading-none flex items-center gap-2">
+                        LENTERA <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-sans font-semibold">Cilik</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium hidden sm:block">Literasi, Eksplorasi, Nalar Kritis & Terampil ala Reporter Anak</p>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-600 hover:text-reporter-blue focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+
+            <!-- Navigation Links -->
+            <nav id="nav-menu" class="hidden lg:flex items-center space-x-1 w-full lg:w-auto mt-3 lg:mt-0">
+                <button onclick="showSection('beranda')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-house text-amber-500"></i> Beranda & CP
+                </button>
+                <button onclick="showSection('materi')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-book-open text-blue-500"></i> Materi Wawancara
+                </button>
+                <button onclick="showSection('lkpd')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-microphone-lines text-red-500"></i> LKPD Voice PDF
+                </button>
+                <button onclick="showSection('game')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-dove text-emerald-500"></i> Game Merpati Pos
+                </button>
+                <button onclick="showSection('kuis')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-brain text-purple-500"></i> Kuis HOTS (10 Soal)
+                </button>
+                <button onclick="showSection('refleksi')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-lightbulb text-yellow-500"></i> Refleksi
+                </button>
+                <button onclick="showSection('pengembang')" class="nav-btn font-semibold px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-reporter-blue transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-user-gear text-teal-600"></i> Pengembang
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- SECTION 1: BERANDA & CP/TP -->
+        <section id="sec-beranda" class="content-section space-y-6">
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-r from-reporter-blue via-reporter-darkblue to-slate-900 rounded-3xl p-6 md:p-10 text-white overflow-hidden shadow-xl">
+                <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none">
+                    <i class="fa-solid fa-camera-retro text-[280px]"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-flex items-center gap-2 bg-yellow-400 text-slate-900 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wide shadow-sm">
+                        <i class="fa-solid fa-star"></i> Media Pembelajaran Interaktif Bahasa Indonesia Kelas 6
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-black font-fredoka leading-tight">
+                        Siap Menjadi <span class="text-yellow-400 underline decoration-wavy decoration-red-500">Reporter Cilik</span> Handal?
+                    </h2>
+                    <p class="text-slate-200 text-sm md:text-base leading-relaxed">
+                        Mari belajar mengumpulkan informasi langsung dari tokoh sekitar melalui teknik wawancara yang benar, etis, dan bernalar kritis dengan aplikasi <b>LENTERA</b>.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="showSection('materi')" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold px-5 py-3 rounded-2xl shadow-lg transition flex items-center gap-2 transform hover:-translate-y-1">
+                            <i class="fa-solid fa-play"></i> Mulai Belajar Materi
+                        </button>
+                        <button onclick="showSection('lkpd')" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold px-5 py-3 rounded-2xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-microphone"></i> Proyek LKPD Suara
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capaian Pembelajaran & Tujuan Pembelajaran Card -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- CP Card -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-3 hover:shadow-md transition">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-lg font-bold font-fredoka text-slate-800">Capaian Pembelajaran (CP) - Fase C</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Peserta didik mampu menyampaikan gagasan, hasil pengamatan, dan pengalaman secara lisan dengan santun melalui wawancara. Peserta didik dapat menggali informasi secara mendalam dengan mengajukan pertanyaan yang relevan menggunakan unsur <b>ADIKSIMBA</b> (5W+1H) kepada narasumber tokoh masyarakat di lingkungan sekitar.
+                    </p>
+                </div>
+
+                <!-- TP Card -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-3 hover:shadow-md transition">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h3 class="text-lg font-bold font-fredoka text-slate-800">Tujuan Pembelajaran (TP)</h3>
+                    </div>
+                    <ul class="text-sm text-slate-600 space-y-2">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span>Siswa dapat menjelaskan pengertian wawancara, pewawancara, dan narasumber secara rinci.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span>Siswa mampu merumuskan daftar pertanyaan bernalar kritis berbasis unsur 5W+1H.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mt-1"></i>
+                            <span>Siswa melatih etika reporter serta keterampilan merekam suara menjadi teks otomatis untuk laporan PDF.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Access Flow -->
+            <div class="bg-amber-50 border border-amber-200 rounded-3xl p-6">
+                <h3 class="text-center font-bold font-fredoka text-amber-900 text-xl mb-6">4 Langkah Belajar Sukses di LENTERA 🚀</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-amber-400 text-slate-900 rounded-full flex items-center justify-center font-black">1</div>
+                        <h4 class="font-bold text-sm text-slate-800">Pahami Materi</h4>
+                        <p class="text-xs text-slate-500">Konsep wawancara & Etika Reporter Cilik</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-blue-500 text-white rounded-full flex items-center justify-center font-black">2</div>
+                        <h4 class="font-bold text-sm text-slate-800">Proyek LKPD</h4>
+                        <p class="text-xs text-slate-500">Rekam wawancara & generate PDF</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-emerald-500 text-white rounded-full flex items-center justify-center font-black">3</div>
+                        <h4 class="font-bold text-sm text-slate-800">Main Game</h4>
+                        <p class="text-xs text-slate-500">Terbang bersama Merpati Pos Reporter</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-amber-100 space-y-2">
+                        <div class="w-10 h-10 mx-auto bg-purple-500 text-white rounded-full flex items-center justify-center font-black">4</div>
+                        <h4 class="font-bold text-sm text-slate-800">Kuis HOTS</h4>
+                        <p class="text-xs text-slate-500">Uji 10 soal penalaran kritis</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MATERI WAWANCARA INTERAKTIF -->
+        <section id="sec-materi" class="content-section hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                <div>
+                    <h2 class="text-2xl font-bold font-fredoka text-reporter-blue flex items-center gap-2">
+                        <i class="fa-solid fa-microphone-lines text-red-500"></i> Akademi Reporter Cilik
+                    </h2>
+                    <p class="text-slate-500 text-sm">Pelajari konsep dasar, unsur pertanyaan, tahapan, hingga etika reporter di bawah ini.</p>
+                </div>
+                <button onclick="readAloudCurrentSection()" class="bg-blue-50 text-blue-600 hover:bg-blue-100 font-semibold px-4 py-2 rounded-xl text-sm transition flex items-center gap-2 border border-blue-200">
+                    <i class="fa-solid fa-volume-high"></i> Suara Pembaca Teks
+                </button>
+            </div>
+
+            <!-- Tab Buttons for Sub-Materials -->
+            <div class="flex overflow-x-auto space-x-2 pb-2">
+                <button onclick="switchMateriTab('definisi')" class="materi-tab-btn active bg-reporter-blue text-white font-semibold px-5 py-2.5 rounded-2xl whitespace-nowrap text-sm shadow-sm">
+                    1. Pengertian & Narasumber
+                </button>
+                <button onclick="switchMateriTab('5w1h')" class="materi-tab-btn bg-white text-slate-600 hover:bg-slate-50 font-semibold px-5 py-2.5 rounded-2xl whitespace-nowrap text-sm border border-slate-200">
+                    2. Unsur 5W + 1H (ADIKSIMBA)
+                </button>
+                <button onclick="switchMateriTab('tahapan')" class="materi-tab-btn bg-white text-slate-600 hover:bg-slate-50 font-semibold px-5 py-2.5 rounded-2xl whitespace-nowrap text-sm border border-slate-200">
+                    3. Persiapan & Tahapan Wawancara
+                </button>
+                <button onclick="switchMateriTab('etika')" class="materi-tab-btn bg-white text-slate-600 hover:bg-slate-50 font-semibold px-5 py-2.5 rounded-2xl whitespace-nowrap text-sm border border-slate-200">
+                    4. Etika & Kode Etik Reporter (Lengkap)
+                </button>
+            </div>
+
+            <!-- Materi Sub-content 1: Definisi -->
+            <div id="materi-definisi" class="materi-sub-content space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center font-bold text-xl">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-fredoka text-slate-800">Apa itu Wawancara?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            <b>Wawancara</b> adalah kegiatan tanya jawab lisan antara dua orang atau lebih dengan tujuan untuk memperoleh data, fakta, keterangan, atau sudut pandang yang akurat mengenai suatu peristiwa atau topik tertentu.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-2xl border-l-4 border-amber-400 text-xs text-slate-600">
+                            <b>Pewawancara (Reporter Cilik):</b> Orang yang bertugas mengajukan pertanyaan, mendengarkan, dan mencatat atau merekam informasi dari narasumber.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center font-bold text-xl">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-fredoka text-slate-800">Siapa itu Narasumber?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            <b>Narasumber</b> adalah tokoh atau pihak yang memberikan informasi, jawaban, dan penjelasan atas pertanyaan pewawancara. Narasumber dipilih berdasarkan keahlian, pengalaman, atau keterlibatannya secara langsung.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-2xl border-l-4 border-blue-400 text-xs text-slate-600">
+                            <b>Contoh Tokoh Sekitar:</b> Kepala Desa/RT, Petani Organik, Dokter Puskesmas, Guru, Pengrajin Tradisional, atau Pedagang Pasar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materi Sub-content 2: 5W1H ADIKSIMBA -->
+            <div id="materi-5w1h" class="materi-sub-content hidden space-y-6">
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold font-fredoka text-reporter-blue mb-2">Formula Pertanyaan ADIKSIMBA (5W + 1H)</h3>
+                    <p class="text-slate-600 text-sm mb-6">Reporter yang kritis tidak hanya bertanya 'apa', tetapi menggali lebih dalam alasan dan cara kejadian berlangsung:</p>
+
+                    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-red-50 rounded-2xl border border-red-100 hover:scale-105 transition">
+                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">APA (What)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Peristiwa / Hal</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Apa jenis pupuk yang Bapak gunakan untuk tanaman ini?"</p>
+                        </div>
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 hover:scale-105 transition">
+                            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">DI MANA (Where)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Tempat</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Di mana Ibu biasanya menjual kerajinan anyaman ini?"</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 hover:scale-105 transition">
+                            <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded">KAPAN (When)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Waktu</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Kapan kegiatan gotong royong warga desa dilaksanakan?"</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100 hover:scale-105 transition">
+                            <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">SIAPA (Who)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Tokoh / Pelaku</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Siapa saja yang memandu pembuatan pupuk organik ini?"</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100 hover:scale-105 transition">
+                            <span class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">MENGAPA (Why)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Alasan / Latar Belakang</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Mengapa warga memilih mengolah sampah plastik menjadi batako?"</p>
+                        </div>
+                        <div class="p-4 bg-teal-50 rounded-2xl border border-teal-100 hover:scale-105 transition">
+                            <span class="bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded">BAGAIMANA (How)</span>
+                            <h4 class="font-bold text-slate-800 mt-2">Menanyakan Proses / Cara</h4>
+                            <p class="text-xs text-slate-600 mt-1">"Bagaimana langkah-langkah memilah sampah dari rumah?"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materi Sub-content 3: Tahapan Wawancara -->
+            <div id="materi-tahapan" class="materi-sub-content hidden space-y-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-3">
+                        <div class="w-10 h-10 bg-amber-400 text-slate-900 rounded-2xl flex items-center justify-center font-black">1</div>
+                        <h3 class="font-bold font-fredoka text-slate-800 text-lg">Sebelum Wawancara</h3>
+                        <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+                            <li>Menentukan topik utama wawancara.</li>
+                            <li>Memilih narasumber yang sesuai dengan topik.</li>
+                            <li>Menghubungi narasumber & membuat janji bertemu.</li>
+                            <li>Menyusun daftar pertanyaan berbasis 5W+1H.</li>
+                            <li>Menyiapkan alat rekam, alat tulis, dan kartu ID.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-3">
+                        <div class="w-10 h-10 bg-blue-500 text-white rounded-2xl flex items-center justify-center font-black">2</div>
+                        <h3 class="font-bold font-fredoka text-slate-800 text-lg">Saat Wawancara</h3>
+                        <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+                            <li>Datang tepat waktu sesuai kesepakatan.</li>
+                            <li>Berpakaian rapi dan bersikap sopan.</li>
+                            <li>Memulai dengan salam, sapaan hormat, & perkenalan.</li>
+                            <li>Mengajukan pertanyaan secara runtut dan jelas.</li>
+                            <li>Mendengarkan aktif & tidak memotong penjelasan.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-3">
+                        <div class="w-10 h-10 bg-emerald-500 text-white rounded-2xl flex items-center justify-center font-black">3</div>
+                        <h3 class="font-bold font-fredoka text-slate-800 text-lg">Setelah Wawancara</h3>
+                        <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+                            <li>Mengucapkan terima kasih atas waktu narasumber.</li>
+                            <li>Memohon maaf jika ada kekurangan selama percakapan.</li>
+                            <li>Meminta foto bersama sebagai bukti dokumentasi.</li>
+                            <li>Merapikan transkrip rekam suara & catatan.</li>
+                            <li>Menyusun laporan wawancara yang jujur tanpa memelintir kata.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materi Sub-content 4: Etika Reporter Lengkap -->
+            <div id="materi-etika" class="materi-sub-content hidden space-y-6">
+                <!-- Prinsip 5 S Card -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="text-xl font-bold font-fredoka text-reporter-blue flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-red-500"></i> Prinsip Sikap Utama Reporter Cilik (5 S)
+                    </h3>
+                    <div class="grid sm:grid-cols-2 md:grid-cols-5 gap-3 text-center">
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                            <div class="text-2xl mb-1">😊</div>
+                            <h4 class="font-bold text-amber-900 text-sm">Senyum</h4>
+                            <p class="text-[11px] text-amber-700">Wajah ramah & bersahabat</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                            <div class="text-2xl mb-1">👋</div>
+                            <h4 class="font-bold text-blue-900 text-sm">Sapa</h4>
+                            <p class="text-[11px] text-blue-700">Menyapa hangat tokoh</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <div class="text-2xl mb-1">🙏</div>
+                            <h4 class="font-bold text-emerald-900 text-sm">Salam</h4>
+                            <p class="text-[11px] text-emerald-700">Salam pembuka yang hormat</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100">
+                            <div class="text-2xl mb-1">🎩</div>
+                            <h4 class="font-bold text-purple-900 text-sm">Sopan</h4>
+                            <p class="text-[11px] text-purple-700">Bahasa tubuh & pakaian rapi</p>
+                        </div>
+                        <div class="p-4 bg-pink-50 rounded-2xl border border-pink-100">
+                            <div class="text-2xl mb-1">💬</div>
+                            <h4 class="font-bold text-pink-900 text-sm">Santun</h4>
+                            <p class="text-[11px] text-pink-700">Kata-kata yang santun</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Do's & Don'ts Grid -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Do's Card -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-6 space-y-3">
+                        <h4 class="font-bold font-fredoka text-emerald-900 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i> Hal yang WAJIB Dilakukan (Do's)
+                        </h4>
+                        <ul class="text-xs text-emerald-800 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Meminta izin sebelum merekam suara atau mengambil foto narasumber.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Gunakan kata sapaan sopan seperti "Bapak", "Ibu", atau "Kakak".</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Menyimak jawaban dengan perhatian penuh dan kontak mata yang wajar.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Menuliskan laporan hasil wawancara sesuai fakta tanpa mengarang berita palsu.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Don'ts Card -->
+                    <div class="bg-red-50 border border-red-200 rounded-3xl p-6 space-y-3">
+                        <h4 class="font-bold font-fredoka text-red-900 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-circle-xmark text-red-600"></i> Hal yang HARUS Dihindari (Don'ts)
+                        </h4>
+                        <ul class="text-xs text-red-800 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-xmark text-red-600 mt-0.5"></i>
+                                <span>Memotong narasumber yang sedang berbicara atau sibuk menjelaskan.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-xmark text-red-600 mt-0.5"></i>
+                                <span>Memaksa narasumber jika ia menolak menjawab pertanyaan pribadi.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-xmark text-red-600 mt-0.5"></i>
+                                <span>Bersikap tidak sabar, bermain gawai/HP sendiri saat narasumber berbicara.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-xmark text-red-600 mt-0.5"></i>
+                                <span>Mengubah atau memelintir pernyataan asli narasumber di dalam laporan final.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: LKPD PROYEK WAWANCARA DENGAN SPEECH-TO-TEXT & PDF -->
+        <section id="sec-lkpd" class="content-section hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span class="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase">Proyek Nyata Reporter</span>
+                    <h2 class="text-2xl font-bold font-fredoka text-reporter-blue mt-1">LKPD Studio Reporter Cilik</h2>
+                    <p class="text-slate-500 text-sm">Buat pertanyaan dinamis, rekam suara narasumber menjadi teks otomatis, dan unduh Laporan Resmi PDF!</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="clearLkpdForm()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-red-500 border rounded-xl">
+                        <i class="fa-solid fa-trash mr-1"></i> Reset Form
+                    </button>
+                    <button onclick="generatePDFReport()" class="bg-reporter-red hover:bg-red-600 text-white font-bold px-5 py-2.5 rounded-2xl shadow transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-file-pdf"></i> Generate PDF Laporan
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Identity Form -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
+                    <h3 class="font-bold font-fredoka text-slate-800 text-lg border-b pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-amber-500"></i> Identitas Peliputan
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Reporter Cilik</label>
+                            <input type="text" id="lkpd-reporter" placeholder="Contoh: Budi Santoso" class="w-full text-sm p-3 border rounded-xl focus:ring-2 focus:ring-amber-400 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kelas / Sekolah</label>
+                            <input type="text" id="lkpd-sekolah" value="Kelas 6 - SD Negeri 2 Penantian" class="w-full text-sm p-3 border rounded-xl focus:ring-2 focus:ring-amber-400 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Narasumber Tokoh</label>
+                            <input type="text" id="lkpd-narasumber" placeholder="Contoh: Pak Supri (Ketua RT 02)" class="w-full text-sm p-3 border rounded-xl focus:ring-2 focus:ring-amber-400 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Profesi / Peran Tokoh</label>
+                            <input type="text" id="lkpd-profesi" placeholder="Contoh: Petani Organik / Pengrajin" class="w-full text-sm p-3 border rounded-xl focus:ring-2 focus:ring-amber-400 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Topik Utama Wawancara</label>
+                            <input type="text" id="lkpd-topik" placeholder="Contoh: Inovasi Kebersihan Lingkungan Desa" class="w-full text-sm p-3 border rounded-xl focus:ring-2 focus:ring-amber-400 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic QnA Builder -->
+                <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3">
+                        <div>
+                            <h3 class="font-bold font-fredoka text-slate-800 text-lg flex items-center gap-2">
+                                <i class="fa-solid fa-list-ol text-blue-500"></i> Daftar Pertanyaan & Jawaban
+                            </h3>
+                            <p class="text-xs text-slate-500">Klik tombol mikrofon pada masing-masing baris untuk merekam ucapan narasumber secara otomatis.</p>
+                        </div>
+                        <button onclick="addQnAItem()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> Tambah Pertanyaan
+                        </button>
+                    </div>
+
+                    <!-- Speech Status Indicator -->
+                    <div id="speech-indicator" class="hidden bg-red-50 border border-red-200 p-3 rounded-2xl flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-red-600">
+                            <span class="w-3 h-3 bg-red-600 rounded-full pulse-live inline-block"></span>
+                            <span id="speech-indicator-text">Sedang mendengarkan ucapan... Bicaralah di dekat mikrofon!</span>
+                        </div>
+                        <button onclick="stopSpeechRecognition()" class="bg-red-600 text-white text-xs px-3 py-1 rounded-lg font-bold">Hentikan</button>
+                    </div>
+
+                    <!-- Container Dynamic List -->
+                    <div id="qna-container" class="space-y-4">
+                        <!-- Dynamic items will be added here via JS -->
+                    </div>
+
+                    <!-- Kesimpulan Section -->
+                    <div class="p-4 bg-purple-50 rounded-2xl space-y-2 border border-purple-100">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-purple-700 uppercase flex items-center gap-1">
+                                <i class="fa-solid fa-lightbulb"></i> Kesimpulan Hasil Peliputan Wawancara
+                            </span>
+                            <button onclick="startSpeechToField('lkpd-kesimpulan')" class="bg-purple-600 text-white text-xs px-2.5 py-1 rounded-lg hover:bg-purple-700 transition flex items-center gap-1">
+                                <i class="fa-solid fa-microphone"></i> Rekam Kesimpulan
+                            </button>
+                        </div>
+                        <textarea id="lkpd-kesimpulan" rows="3" placeholder="Tuliskan atau rekam ringkasan poin-poin terpenting yang didapatkan dari narasumber..." class="w-full text-sm p-3 border rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-purple-300"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: GAME EDUKASI "THE PIGEON IS FLYING" -->
+        <section id="sec-game" class="content-section hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Game Edukasi Interaktif</span>
+                    <h2 class="text-2xl font-bold font-fredoka text-reporter-blue mt-1">The Pigeon is Flying 🕊️</h2>
+                    <p class="text-slate-500 text-sm">Bantu Merpati Pos Reporter terbang tinggi dan menangkap awan berisi jawaban yang tepat!</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-2xl flex items-center gap-3">
+                        <span class="text-xs text-slate-500 font-bold">SKOR: <span id="game-score" class="text-emerald-600 text-xl font-fredoka ml-1">0</span></span>
+                        <span class="text-xs text-slate-500 font-bold">NYAWA: <span id="game-lives" class="text-red-500 text-xl font-fredoka ml-1">❤️❤️❤️</span></span>
+                    </div>
+                    <button onclick="resetGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4 py-2.5 rounded-2xl text-sm transition shadow-md">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Main Ulang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Canvas Game Container -->
+            <div class="relative bg-slate-900 rounded-3xl overflow-hidden shadow-xl border-4 border-slate-800">
+                <canvas id="pigeonCanvas" class="w-full h-[420px] block cursor-pointer bg-sky-300"></canvas>
+                
+                <!-- Overlay Start / Game Over -->
+                <div id="game-overlay" class="absolute inset-0 bg-slate-900/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center text-white space-y-4 z-20">
+                    <div class="w-20 h-20 bg-amber-400 text-slate-900 rounded-3xl flex items-center justify-center text-4xl shadow-lg transform rotate-3">
+                        <i class="fa-solid fa-dove"></i>
+                    </div>
+                    <h3 id="overlay-title" class="text-3xl font-black font-fredoka text-yellow-400">Merpati Pos Reporter Cilik</h3>
+                    <p id="overlay-desc" class="text-slate-200 text-sm max-w-md leading-relaxed">
+                        Terbanglah menembus langit! Tangkap awan dengan jawaban yang BENAR untuk menambah skor. Hindari awan jawaban salah!
+                    </p>
+                    <button onclick="startGame()" class="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition text-base">
+                        🚀 MULAI TERBANG SEKARANG
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border p-4 rounded-2xl text-center text-xs text-slate-600">
+                💡 <b>Petunjuk Kontrol Game:</b> Tekan tombol <b>SPASI</b> pada keyboard, atau <b>Klik / Sentuh Layar Canvas</b> untuk membuat Merpati mengepakkan sayap dan terbang melambung!
+            </div>
+        </section>
+
+        <!-- SECTION 5: SOAL KUIS HOTS (10 SOAL) -->
+        <section id="sec-kuis" class="content-section hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Evaluasi Penalaran Tingkat Tinggi</span>
+                    <h2 class="text-2xl font-bold font-fredoka text-reporter-blue mt-1">Kuis HOTS Reporter Cilik (10 Soal)</h2>
+                    <p class="text-slate-500 text-sm">Uji nalar kritis kamu dalam menganalisis skenario dan tantangan jurnalistik cilik!</p>
+                </div>
+                <button onclick="submitQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-2.5 rounded-2xl shadow-md transition text-sm">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Jawaban
+                </button>
+            </div>
+
+            <!-- Questions Form Container -->
+            <div id="quiz-container" class="space-y-6">
+                <!-- 10 Questions injected via JS -->
+            </div>
+
+            <!-- Result Card & Breakdown -->
+            <div id="quiz-result" class="hidden bg-slate-900 rounded-3xl p-6 md:p-8 text-white space-y-6 shadow-xl border border-purple-500/30">
+                <div class="text-center space-y-3">
+                    <i class="fa-solid fa-award text-yellow-400 text-6xl"></i>
+                    <h3 class="text-3xl font-black font-fredoka">Hasil Evaluasi Kuis HOTS</h3>
+                    <div class="text-6xl font-black text-yellow-400 font-fredoka my-2" id="quiz-score-val">0 / 100</div>
+                    <p id="quiz-feedback" class="text-slate-300 text-sm max-w-lg mx-auto leading-relaxed">Pesan umpan balik kuis...</p>
+                </div>
+
+                <!-- Discussion Breakdown -->
+                <div class="border-t border-slate-800 pt-6 space-y-4">
+                    <h4 class="font-bold text-amber-400 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Pembahasan Lengkap & Kunci Jawaban
+                    </h4>
+                    <div id="quiz-discussion" class="space-y-3 text-xs text-slate-300">
+                        <!-- Explanations injected dynamically -->
+                    </div>
+                </div>
+
+                <div class="text-center pt-2">
+                    <button onclick="resetQuiz()" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Coba Kuis Lagi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: REFLEKSI PEMBELAJARAN -->
+        <section id="sec-refleksi" class="content-section hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Refleksi Diri</span>
+                    <h2 class="text-2xl font-bold font-fredoka text-reporter-blue">Refleksi Pembelajaran Hari Ini</h2>
+                    <p class="text-slate-500 text-sm">Bagaimana kesan dan tingkat pemahamanmu setelah mengeksplorasi media LENTERA?</p>
+                </div>
+
+                <!-- Mood Emoji Picker -->
+                <div class="space-y-3 text-center bg-slate-50 p-6 rounded-3xl border">
+                    <label class="block text-xs font-bold text-slate-700">Pilih Emoji Perasaanmu Setelah Belajar Wawancara:</label>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="setReflectionMood('Sangat Senang & Paham')" class="mood-btn p-4 bg-white hover:bg-amber-100 border rounded-2xl text-3xl transition transform hover:scale-110">😊</button>
+                        <button onclick="setReflectionMood('Semangat Menjadi Reporter')" class="mood-btn p-4 bg-white hover:bg-amber-100 border rounded-2xl text-3xl transition transform hover:scale-110">🤩</button>
+                        <button onclick="setReflectionMood('Perlu Belajar Lebih Lanjut')" class="mood-btn p-4 bg-white hover:bg-amber-100 border rounded-2xl text-3xl transition transform hover:scale-110">🤔</button>
+                    </div>
+                </div>
+
+                <!-- Checklist Reflection -->
+                <div class="max-w-xl mx-auto space-y-3 bg-slate-50 p-6 rounded-3xl border">
+                    <h4 class="font-bold text-sm text-slate-800 mb-2">Checklist Pencapaian Diri Siswa:</h4>
+                    <label class="flex items-center gap-3 text-xs text-slate-700 cursor-pointer p-2 hover:bg-white rounded-xl">
+                        <input type="checkbox" class="w-4 h-4 rounded text-amber-500 focus:ring-0">
+                        <span>Saya sudah paham perbedaan pewawancara dan narasumber.</span>
+                    </label>
+                    <label class="flex items-center gap-3 text-xs text-slate-700 cursor-pointer p-2 hover:bg-white rounded-xl">
+                        <input type="checkbox" class="w-4 h-4 rounded text-amber-500 focus:ring-0">
+                        <span>Saya mampu membuat pertanyaan yang kritis menggunakan formula 5W+1H (ADIKSIMBA).</span>
+                    </label>
+                    <label class="flex items-center gap-3 text-xs text-slate-700 cursor-pointer p-2 hover:bg-white rounded-xl">
+                        <input type="checkbox" class="w-4 h-4 rounded text-amber-500 focus:ring-0">
+                        <span>Saya siap menerapkan Etika 5S saat mewawancarai tokoh di lingkungan sekitar.</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: PROFIL PENGEMBANG MEDIA -->
+        <section id="sec-pengembang" class="content-section hidden space-y-6">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 max-w-3xl mx-auto text-center space-y-6">
+                <!-- Avatar / Badge -->
+                <div class="relative w-36 h-36 mx-auto">
+                    <div class="w-36 h-36 bg-gradient-to-tr from-amber-400 via-reporter-yellow to-reporter-blue rounded-full flex items-center justify-center text-white text-6xl shadow-xl border-4 border-white">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <span class="absolute bottom-1 right-1 bg-emerald-500 text-white p-2.5 rounded-full text-xs shadow-md" title="Pendidik Profesional">
+                        <i class="fa-solid fa-certificate"></i>
+                    </span>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Pengembang Media Pembelajaran Interaktif</span>
+                    <h2 class="text-3xl font-black font-fredoka text-reporter-blue">Guyub Tri Salaswati, S.Pd.Gr.</h2>
+                    <p class="text-slate-600 font-semibold text-sm">SD Negeri 2 Penantian</p>
+                </div>
+
+                <p class="text-xs md:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed italic bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    "Media pembelajaran LENTERA dirancang khusus untuk menghidupkan suasana kelas Bahasa Indonesia yang aktif, berbobot, dan menyenangkan melalui kolaborasi teknologi kecerdasan suara, literasi kritis, dan pembelajaran berbasis proyek bagi siswa Sekolah Dasar."
+                </p>
+
+                <div class="pt-4 border-t flex flex-wrap justify-center gap-6 text-xs text-slate-500">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-school text-amber-500"></i>
+                        <span>Instansi: <b>SD Negeri 2 Penantian</b></span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-bookmark text-blue-500"></i>
+                        <span>Mata Pelajaran: <b>Bahasa Indonesia Kelas 6</b></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Toast / Modal Container for non-alert messages -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl transform transition-all">
+            <div id="modal-icon" class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-2xl bg-amber-100 text-amber-600">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modal-title" class="text-lg font-bold font-fredoka text-slate-800">Informasi</h3>
+            <p id="modal-message" class="text-xs text-slate-600 leading-relaxed">Pesan modal...</p>
+            <button onclick="closeModal()" class="w-full bg-reporter-blue hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-4 text-center text-xs text-slate-500 mt-8">
+        <p>© 2026 LENTERA - Media Pembelajaran Interaktif Wawancara Kelas 6. Disusun Oleh <b>Guyub Tri Salaswati, S.Pd.Gr. (SD Negeri 2 Penantian)</b>.</p>
+    </footer>
+
+    <script>
+        /* ----------------------------------------------------
+           1. CUSTOM MODAL LOGIC (No alert() mandatory rule)
+        ---------------------------------------------------- */
+        function showModal(title, message, iconClass = 'fa-circle-info', bgClass = 'bg-amber-100 text-amber-600') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            const iconEl = document.getElementById('modal-icon');
+            iconEl.className = `w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-2xl ${bgClass}`;
+            iconEl.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        /* ----------------------------------------------------
+           2. NAVIGATION & TABS
+        ---------------------------------------------------- */
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById('sec-' + sectionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('nav-menu').classList.add('hidden');
+
+            // If game section opened, resize canvas properly
+            if (sectionId === 'game') {
+                setTimeout(resizeCanvas, 100);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function switchMateriTab(tabKey) {
+            document.querySelectorAll('.materi-sub-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.materi-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-reporter-blue', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+
+            document.getElementById('materi-' + tabKey).classList.remove('hidden');
+            event.currentTarget.classList.remove('bg-white', 'text-slate-600');
+            event.currentTarget.classList.add('bg-reporter-blue', 'text-white');
+        }
+
+        function readAloudCurrentSection() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const visibleMateri = document.querySelector('.materi-sub-content:not(.hidden)');
+                const text = visibleMateri ? visibleMateri.innerText : "Selamat datang di materi wawancara LENTERA.";
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+                showModal('Suara Pembaca Teks', 'Membacakan teks materi aktif...', 'fa-volume-high', 'bg-blue-100 text-blue-600');
+            } else {
+                showModal('Informasi Browser', 'Perangkat Anda tidak mendukung fitur pembaca suara.', 'fa-triangle-exclamation', 'bg-red-100 text-red-600');
+            }
+        }
+
+        /* ----------------------------------------------------
+           STREAMING_CHUNK:Implementing Dynamic LKPD & Speech-to-Text Logic...
+           3. DYNAMIC LKPD BUILDER & SPEECH-TO-TEXT PER FIELD
+        ---------------------------------------------------- */
+        let qnaCounter = 0;
+        let activeRecognition = null;
+        let activeTargetInputId = null;
+
+        function addQnAItem(defaultQ = '', defaultA = '') {
+            qnaCounter++;
+            const itemId = qnaCounter;
+            const qInputId = `qna-q-${itemId}`;
+            const aInputId = `qna-a-${itemId}`;
+
+            const qnaHtml = `
+                <div id="qna-card-${itemId}" class="qna-item bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3 relative group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-lg">
+                            Pertanyaan #${itemId}
+                        </span>
+                        <button onclick="removeQnAItem(${itemId})" class="text-xs text-red-500 hover:text-red-700 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can"></i> Hapus
+                        </button>
+                    </div>
+
+                    <!-- Question Input -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[11px] font-bold text-slate-600">Rumusan Pertanyaan (5W+1H)</label>
+                            <button onclick="startSpeechToField('${qInputId}')" class="text-[11px] bg-red-500 hover:bg-red-600 text-white font-bold px-2.5 py-0.5 rounded-md flex items-center gap-1 transition">
+                                <i class="fa-solid fa-microphone"></i> Rekam Pertanyaan
+                            </button>
+                        </div>
+                        <input type="text" id="${qInputId}" value="${defaultQ}" placeholder="Contoh: Mengapa Bapak memilih cara bercocok tanam organik ini?" class="w-full text-sm p-2.5 border rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-amber-400">
+                    </div>
+
+                    <!-- Answer Input -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[11px] font-bold text-slate-600">Jawaban / Penjelasan Narasumber</label>
+                            <button onclick="startSpeechToField('${aInputId}')" class="text-[11px] bg-blue-500 hover:bg-blue-600 text-white font-bold px-2.5 py-0.5 rounded-md flex items-center gap-1 transition">
+                                <i class="fa-solid fa-microphone"></i> Rekam Jawaban
+                            </button>
+                        </div>
+                        <textarea id="${aInputId}" rows="2" placeholder="Tuliskan atau bicarakan jawaban narasumber di sini..." class="w-full text-sm p-2.5 border rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-400">${defaultA}</textarea>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('qna-container').insertAdjacentHTML('beforeend', qnaHtml);
+        }
+
+        function removeQnAItem(itemId) {
+            const card = document.getElementById(`qna-card-${itemId}`);
+            if (card) card.remove();
+        }
+
+        function startSpeechToField(inputId) {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                showModal('Keterbatasan Browser', 'Fitur rekam suara ke teks memerlukan browser Google Chrome atau Microsoft Edge.', 'fa-triangle-exclamation', 'bg-amber-100 text-amber-700');
+                return;
+            }
+
+            if (activeRecognition) {
+                activeRecognition.stop();
+            }
+
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            activeRecognition = new SpeechRec();
+            activeRecognition.continuous = false;
+            activeRecognition.interimResults = false;
+            activeRecognition.lang = 'id-ID';
+
+            activeTargetInputId = inputId;
+            const targetEl = document.getElementById(inputId);
+
+            activeRecognition.onstart = () => {
+                document.getElementById('speech-indicator').classList.remove('hidden');
+                document.getElementById('speech-indicator-text').innerText = `Merekam suara untuk kolom "${inputId}"... Silakan berbicara!`;
+            };
+
+            activeRecognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                if (targetEl) {
+                    targetEl.value = (targetEl.value ? targetEl.value + ' ' : '') + transcript;
+                }
+            };
+
+            activeRecognition.onerror = (event) => {
+                showModal('Kesalahan Rekam Suara', 'Gagal mengenali suara. Pastikan mikrofon diizinkan.', 'fa-microphone-slash', 'bg-red-100 text-red-600');
+                stopSpeechRecognition();
+            };
+
+            activeRecognition.onend = () => {
+                stopSpeechRecognition();
+            };
+
+            activeRecognition.start();
+        }
+
+        function stopSpeechRecognition() {
+            if (activeRecognition) {
+                activeRecognition = null;
+            }
+            document.getElementById('speech-indicator').classList.add('hidden');
+        }
+
+        function clearLkpdForm() {
+            document.getElementById('lkpd-reporter').value = '';
+            document.getElementById('lkpd-narasumber').value = '';
+            document.getElementById('lkpd-profesi').value = '';
+            document.getElementById('lkpd-topik').value = '';
+            document.getElementById('lkpd-kesimpulan').value = '';
+            document.getElementById('qna-container').innerHTML = '';
+            // Re-add default 2 items
+            addQnAItem();
+            addQnAItem();
+        }
+
+        /* ----------------------------------------------------
+           4. GENERATE PDF REPORT FROM DYNAMIC LKPD
+        ---------------------------------------------------- */
+        function generatePDFReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const reporter = document.getElementById('lkpd-reporter').value || 'Wartawan Cilik';
+            const sekolah = document.getElementById('lkpd-sekolah').value || 'SD Negeri 2 Penantian';
+            const narasumber = document.getElementById('lkpd-narasumber').value || '-';
+            const profesi = document.getElementById('lkpd-profesi').value || '-';
+            const topik = document.getElementById('lkpd-topik').value || '-';
+            const kesimpulan = document.getElementById('lkpd-kesimpulan').value || '-';
+
+            // PDF Title
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text('LAPORAN HASIL WAWANCARA REPORTER CILIK', 105, 18, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Aplikasi LENTERA - Bahasa Indonesia SD Negeri 2 Penantian', 105, 24, { align: 'center' });
+            doc.line(15, 28, 195, 28);
+
+            let y = 36;
+            doc.setFont('helvetica', 'bold');
+            doc.text('I. IDENTITAS PELIPUTAN', 15, y); y += 6;
+            
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Nama Reporter   : ${reporter}`, 20, y); y += 6;
+            doc.text(`Sekolah / Kelas : ${sekolah}`, 20, y); y += 6;
+            doc.text(`Narasumber      : ${narasumber} (${profesi})`, 20, y); y += 6;
+            doc.text(`Topik Wawancara : ${topik}`, 20, y); y += 10;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('II. CATATAN PERTANYAAN DAN JAWABAN', 15, y); y += 8;
+
+            const qnaCards = document.querySelectorAll('.qna-item');
+            if (qnaCards.length === 0) {
+                doc.setFont('helvetica', 'italic');
+                doc.text('(Belum ada daftar pertanyaan yang diisi)', 20, y); y += 8;
+            } else {
+                qnaCards.forEach((card, idx) => {
+                    const qVal = card.querySelector('input[type="text"]').value || '-';
+                    const aVal = card.querySelector('textarea').value || '-';
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`Pertanyaan #${idx + 1}:`, 20, y); y += 5;
+                    
+                    doc.setFont('helvetica', 'normal');
+                    const splitQ = doc.splitTextToSize(qVal, 170);
+                    doc.text(splitQ, 25, y); y += (splitQ.length * 5) + 2;
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`Jawaban:`, 25, y); y += 5;
+                    
+                    doc.setFont('helvetica', 'normal');
+                    const splitA = doc.splitTextToSize(aVal, 170);
+                    doc.text(splitA, 25, y); y += (splitA.length * 5) + 6;
+
+                    // Page overflow safety
+                    if (y > 260) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                });
+            }
+
+            if (y > 240) {
+                doc.addPage();
+                y = 20;
+            }
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('III. KESIMPULAN HASIL WAWANCARA', 15, y); y += 6;
+            doc.setFont('helvetica', 'normal');
+            const splitKes = doc.splitTextToSize(kesimpulan, 175);
+            doc.text(splitKes, 20, y); y += (splitKes.length * 5) + 15;
+
+            // Signatures
+            if (y > 250) {
+                doc.addPage();
+                y = 20;
+            }
+            doc.text('Mengetahui,', 20, y);
+            doc.text('Reporter Cilik,', 140, y); y += 20;
+            doc.setFont('helvetica', 'bold');
+            doc.text('( Guyub Tri Salaswati, S.Pd.Gr. )', 20, y);
+            doc.text(`( ${reporter} )`, 140, y);
+
+            doc.save(`Laporan_Wawancara_${reporter.replace(/\s+/g, '_')}.pdf`);
+            showModal('PDF Berhasil Dibuat!', `Laporan hasil wawancara ${reporter} telah berhasil diunduh.`, 'fa-circle-check', 'bg-emerald-100 text-emerald-600');
+        }
+
+        /* ----------------------------------------------------
+           STREAMING_CHUNK:Implementing Fixed Canvas Game Engine...
+           5. GAME: THE PIGEON IS FLYING (ROBUST CANVAS ENGINE)
+        ---------------------------------------------------- */
+        const canvas = document.getElementById('pigeonCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let pigeon = { x: 70, y: 180, vy: 0, radius: 18 };
+        let clouds = [];
+        let gameScore = 0;
+        let gameLives = 3;
+        let gameActive = false;
+        let currentGameQIndex = 0;
+        let animFrameId = null;
+
+        const gameQuestions = [
+            {
+                q: "Unsur untuk menanyakan ALASAN peristiwa adalah...",
+                correct: "MENGAPA",
+                wrong: ["DI MANA", "SIAPA"]
+            },
+            {
+                q: "Orang yang memberikan keterangan informasi disebut...",
+                correct: "Narasumber",
+                wrong: ["Pewawancara", "Sutradara"]
+            },
+            {
+                q: "Sikap utama reporter sebelum mulai bertanya adalah...",
+                correct: "Mengucapkan Salam",
+                wrong: ["Langsung Pergi", "Memotong Jawaban"]
+            },
+            {
+                q: "Unsur BAGAIMANA digunakan untuk menanyakan...",
+                correct: "Proses / Cara",
+                wrong: ["Waktu Kejadian", "Nama Tempat"]
+            },
+            {
+                q: "Singkatan ADIKSIMBA huruf K merujuk pada...",
+                correct: "KAPAN",
+                wrong: ["KARENA", "KITA"]
+            }
+        ];
+
+        function resizeCanvas() {
+            if (canvas && canvas.parentElement) {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = 420;
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function startGame() {
+            document.getElementById('game-overlay').classList.add('hidden');
+            gameScore = 0;
+            gameLives = 3;
+            currentGameQIndex = 0;
+            pigeon.y = 180;
+            pigeon.vy = 0;
+            updateGameHeaderUI();
+            
+            spawnCloudGroup();
+            gameActive = true;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            gameLoop();
+        }
+
+        function resetGame() {
+            gameActive = false;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            document.getElementById('game-overlay').classList.remove('hidden');
+            document.getElementById('overlay-title').innerText = "Merpati Pos Reporter Cilik";
+            document.getElementById('overlay-desc').innerText = "Klik area layar atau tekan Spasi untuk membuat merpati terbang melambung. Hindari awan jawaban salah!";
+        }
+
+        function updateGameHeaderUI() {
+            document.getElementById('game-score').innerText = gameScore;
+            let hearts = '';
+            for (let i = 0; i < gameLives; i++) hearts += '❤️';
+            document.getElementById('game-lives').innerText = hearts || '💀';
+        }
+
+        function flap() {
+            if (gameActive) {
+                pigeon.vy = -6.5;
+            }
+        }
+
+        canvas.addEventListener('mousedown', flap);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            flap();
+        });
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !document.getElementById('sec-game').classList.contains('hidden')) {
+                e.preventDefault();
+                flap();
+            }
+        });
+
+        function spawnCloudGroup() {
+            clouds = [];
+            const qData = gameQuestions[currentGameQIndex % gameQuestions.length];
+            const options = [
+                { text: qData.correct, isCorrect: true },
+                { text: qData.wrong[0], isCorrect: false },
+                { text: qData.wrong[1], isCorrect: false }
+            ].sort(() => Math.random() - 0.5);
+
+            const startX = canvas.width + 60;
+            const positionsY = [110, 210, 310];
+
+            options.forEach((opt, idx) => {
+                clouds.push({
+                    x: startX,
+                    y: positionsY[idx],
+                    text: opt.text,
+                    isCorrect: opt.isCorrect,
+                    passed: false
+                });
+            });
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+
+            // Background Sky Gradient
+            ctx.fillStyle = '#7dd3fc';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Question Banner Top Bar
+            const qData = gameQuestions[currentGameQIndex % gameQuestions.length];
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(15, 12, canvas.width - 30, 40);
+            ctx.fillStyle = '#fde047';
+            ctx.font = 'bold 13px Poppins, sans-serif';
+            ctx.fillText(`PERTANYAAN (#${currentGameQIndex + 1}): ${qData.q}`, 25, 37);
+
+            // Pigeon Physics
+            pigeon.vy += 0.35;
+            pigeon.y += pigeon.vy;
+
+            // Render Pigeon
+            ctx.save();
+            ctx.translate(pigeon.x, pigeon.y);
+            // Body
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, 0, pigeon.radius, 0, Math.PI * 2);
+            ctx.fill();
+            // Beak
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.moveTo(pigeon.radius - 2, -2);
+            ctx.lineTo(pigeon.radius + 12, 2);
+            ctx.lineTo(pigeon.radius - 2, 6);
+            ctx.fill();
+            // Eye
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(8, -5, 3, 0, Math.PI * 2);
+            ctx.fill();
+            // Wing
+            ctx.fillStyle = '#cbd5e1';
+            ctx.beginPath();
+            ctx.ellipse(-6, 2, 10, 6, Math.PI / 4, 0, Math.PI * 2);
+            ctx.fill();
+            // Reporter Cap
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(-6, -22, 18, 6);
+            ctx.restore();
+
+            // Screen boundary check
+            if (pigeon.y > canvas.height - 20 || pigeon.y < 20) {
+                handleLifeLost("Merpati menabrak batas layar!");
+                return;
+            }
+
+            // Move & Render Clouds
+            let allPassed = true;
+            for (let i = 0; i < clouds.length; i++) {
+                let c = clouds[i];
+                // Kecepatan awan dipercepat agar permainan lebih menantang
+                c.x -= 4.2;
+
+                // Draw Cloud Shape
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, 22, 0, Math.PI * 2);
+                ctx.arc(c.x + 20, c.y - 10, 18, 0, Math.PI * 2);
+                ctx.arc(c.x + 40, c.y, 22, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Text Label
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 11px Poppins, sans-serif';
+                ctx.fillText(c.text, c.x - 2, c.y + 4);
+
+                // Collision Detection
+                let dx = pigeon.x - (c.x + 20);
+                let dy = pigeon.y - c.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < pigeon.radius + 28 && !c.passed) {
+                    c.passed = true;
+                    if (c.isCorrect) {
+                        gameScore += 20;
+                        currentGameQIndex++;
+                        updateGameHeaderUI();
+                        spawnCloudGroup();
+                        break;
+                    } else {
+                        handleLifeLost("Kamu menyentuh awan jawaban yang salah!");
+                        return;
+                    }
+                }
+
+                if (c.x > -100) allPassed = false;
+            }
+
+            // Respawn if missed all clouds
+            if (allPassed && clouds.length > 0) {
+                spawnCloudGroup();
+            }
+
+            animFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function handleLifeLost(reason) {
+            gameLives--;
+            updateGameHeaderUI();
+            if (gameLives <= 0) {
+                gameActive = false;
+                document.getElementById('overlay-title').innerText = "Permainan Selesai";
+                document.getElementById('overlay-desc').innerText = `${reason} Total Skor Akhir Kamu: ${gameScore}`;
+                document.getElementById('game-overlay').classList.remove('hidden');
+            } else {
+                pigeon.y = 180;
+                pigeon.vy = 0;
+                spawnCloudGroup();
+                animFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        /* ----------------------------------------------------
+           STREAMING_CHUNK:Updating 10 HOTS Questions with Interview Passages...
+           6. KUIS HOTS (10 SOAL BERBASIS STUDI KASUS & TEKS WAWANCARA)
+        ---------------------------------------------------- */
+        const hots10Questions = [
+            {
+                q: `<b>Bacalah kutipan teks wawancara berikut untuk menjawab soal nomor 1 dan 2!</b>
+                <div class="my-2 p-3 bg-amber-50/80 rounded-2xl border border-amber-200 text-slate-800 text-xs md:text-sm font-normal leading-relaxed">
+                    <p class="mb-1.5"><b>Pewawancara (Budi):</b> "Selamat pagi, Pak Supri. Apa alasan utama Bapak beralih dari pupuk kimia ke pupuk kompos buatan sendiri?"</p>
+                    <p><b>Pak Supri (Narasumber):</b> "Selamat pagi, Budi. Selain harga pupuk kimia makin mahal, tanah sawah saya dulunya makin keras dan cacing tanah hilang. Setelah dua tahun pakai kompos rumput dan kotoran ternak, tanah kembali gembur, cacing banyak lagi, dan hasil panen beras justru lebih sehat."</p>
+                </div>
+                1. Berdasarkan kutipan teks wawancara di atas, apakah alasan utama Pak Supri beralih menggunakan pupuk kompos?`,
+                opts: [
+                    "Karena pupuk kompos dijual dengan harga yang sangat mahal di pasar desa.",
+                    "Karena harga pupuk kimia makin mahal serta kondisi tanah sawah menjadi keras dan cacing tanah hilang.",
+                    "Karena Budi meminta Pak Supri untuk tidak bertani padi lagi.",
+                    "Karena Pak Supri tidak tahu cara membeli pupuk kimia di toko terdekat."
+                ],
+                ans: 1,
+                exp: "Berdasarkan kutipan teks wawancara, Pak Supri menjelaskan bahwa pupuk kimia semakin mahal dan membuat tanah sawah keras serta cacing tanah hilang, sehingga ia beralih ke pupuk kompos."
+            },
+            {
+                q: "2. Berdasarkan kutipan teks wawancara di atas, fakta yang menunjukkan bukti positif penggunaan pupuk kompos bagi ekosistem tanah adalah...",
+                opts: [
+                    "Pak Supri tidak perlu lagi menyiram sawahnya setiap hari.",
+                    "Kondisi tanah sawah kembali gembur dan cacing tanah dapat hidup banyak kembali.",
+                    "Hasil panen padi dapat dipanen setiap seminggu sekali.",
+                    "Budi langsung mendapatkan beras organik secara gratis dari Pak Supri."
+                ],
+                ans: 1,
+                exp: "Dalam teks wawancara, Pak Supri secara eksplisit menyatakan: 'tanah kembali gembur, cacing banyak lagi', yang merupakan fakta bukti nyata perbaikan kondisi ekosistem tanah."
+            },
+            {
+                q: "3. Saat wawancara dengan Pak Kepala Desa mengenai kebersihan air, narasumber tiba-tiba menceritakan hobinya berkebun secara panjang lebar. Tindakan santun dan bernalar kritis yang sebaiknya dilakukan reporter cilik adalah...",
+                opts: [
+                    "Memotong pembicaraan secara kasar dan meminta narasumber diam.",
+                    "Menyimak dengan sopan, lalu perlahan mengarahkan kembali pertanyaan ke topik kebersihan air.",
+                    "Meninggalkan tempat wawancara tanpa pamit karena kesal.",
+                    "Ikut mengobrol panjang lebar tentang hobi berkebun hingga lupa topik utama."
+                ],
+                ans: 1,
+                exp: "Reporter cilik harus menghormati narasumber tetapi tetap fokus pada tujuan wawancara melalui teknik mengarahkan kembali pertanyaan secara sopan."
+            },
+            {
+                q: "4. Kelompok Nina ingin meneliti penyebab berkurangnya pembeli di pasar tradisional setempat. Siapakah narasumber yang PALING tepat dan memiliki otoritas untuk diwawancarai?",
+                opts: [
+                    "Siswa sekolah dasar yang sedang melintas di depan pasar.",
+                    "Ketua Paguyuban Pedagang Pasar & Pengelola Pasar Tradisional.",
+                    "Petugas pos ronda malam yang tinggal jauh dari pasar.",
+                    "Penjual gawai / HP online di luar kota."
+                ],
+                ans: 1,
+                exp: "Pengelola dan Ketua Paguyuban Pedagang Pasar memiliki pengalaman langsung dan data akurat terkait kondisi pasar."
+            },
+            {
+                q: "5. Perhatikan daftar pertanyaan berikut: (1) Apa nama desa ini? (2) Mengapa terjadi penumpukan sampah plastik di sungai desa ini? (3) Kapan Bapak lahir? Pertanyaan yang paling berbobot HOTS untuk menggali informasi mendalam adalah...",
+                opts: [
+                    "Pertanyaan nomor (1)",
+                    "Pertanyaan nomor (2)",
+                    "Pertanyaan nomor (3)",
+                    "Semua pertanyaan sama berbobotnya"
+                ],
+                ans: 1,
+                exp: "Pertanyaan bernomor (2) menggunakan unsur 'Mengapa' yang menuntut penalaran, analisis sebab-akibat, dan penjelasan mendalam dari narasumber."
+            },
+            {
+                q: "6. Apabila narasumber menjawab pertanyaan dengan sangat singkat (misal hanya menjawab 'Ya' atau 'Tidak'), strategi pewawancara yang tepat adalah...",
+                opts: [
+                    "Mengakhiri wawancara saat itu juga.",
+                    "Mengajukan pertanyaan susulan bersifat terbuka seperti 'Bisa dijelaskan alasan Bapak...?'",
+                    "Memaksa narasumber untuk bicara lebih panjang.",
+                    "Marah kepada narasumber."
+                ],
+                ans: 1,
+                exp: "Pertanyaan terbuka (open-ended question) memancing narasumber untuk memberikan alasan dan penjelasan lebih detail."
+            },
+            {
+                q: "7. Sebelum mempublikasikan laporan wawancara, reporter cilik menemukan rumor bahwa narasumber memberikan kabar yang belum pasti. Sikap etis yang harus diambil adalah...",
+                opts: [
+                    "Langsung menuliskan rumor tersebut agar laporan terkesan heboh.",
+                    "Melakukan verifikasi (cek fakta) kembali kepada narasumber atau sumber terpercaya lainnya.",
+                    "Mengubah isi wawancara sesuai kemauan reporter sendiri.",
+                    "Menghapus seluruh laporan wawancara."
+                ],
+                ans: 1,
+                exp: "Prinsip utama jurnalistik adalah verifikasi data demi menjaga kejujuran dan menghindari penyebaran informasi hoaks."
+            },
+            {
+                q: "8. Mengapa reporter cilik wajib mencatat atau merekam izin narasumber sebelum memulai wawancara?",
+                opts: [
+                    "Agar narasumber merasa takut.",
+                    "Sebagai bentuk penghormatan hak privasi dan etika hukum wawancara.",
+                    "Hanya untuk formalitas tanpa arti.",
+                    "Agar durasi wawancara menjadi sangat lama."
+                ],
+                ans: 1,
+                exp: "Meminta izin merupakan dasar etika jurnalistik untuk menghargai privasi dan kesediaan narasumber."
+            },
+            {
+                q: "9. Kalimat pertanyaan mana yang paling tepat untuk menggali SOLUSI atas masalah banjir desa?",
+                opts: [
+                    "Siapa nama Bapak Kepala Desa?",
+                    "Di mana letak kantor desa?",
+                    "Bagaimana rencana konkret warga dan pemerintah desa dalam menanggulangi banjir?",
+                    "Kapan banjir pertama kali terjadi?"
+                ],
+                ans: 2,
+                exp: "Unsur 'Bagaimana' mengenai 'rencana konkret' menggali langkah teknis dan solusi nyata atas permasalahan."
+            },
+            {
+                q: "10. Setelah selesai wawancara, langkah akhir yang WAJIB dilakukan sebelum menyusun laporan PDF adalah...",
+                opts: [
+                    "Mengucapkan terima kasih, memohon maaf, dan merapikan catatan/transkrip rekam suara.",
+                    "Langsung pulang begitu saja tanpa pamit.",
+                    "Menyuruh narasumber membayar biaya wawancara.",
+                    "Menghapus seluruh rekaman suara."
+                ],
+                ans: 0,
+                exp: "Mengucapkan terima kasih, memohon maaf atas kekurangan, dan mengecek kelengkapan catatan adalah penutup wawancara yang etis."
+            }
+        ];
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = hots10Questions.map((q, qIdx) => `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm md:text-base leading-relaxed">${q.q}</h4>
+                    <div class="space-y-2">
+                        ${q.opts.map((opt, optIdx) => `
+                            <label class="flex items-start gap-3 p-3 bg-slate-50 hover:bg-purple-50 rounded-2xl cursor-pointer border text-xs md:text-sm text-slate-700 transition">
+                                <input type="radio" name="hq-${qIdx}" value="${optIdx}" class="mt-1 w-4 h-4 text-purple-600 focus:ring-0">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function submitQuiz() {
+            let correctCount = 0;
+            let discussionHtml = '';
+
+            hots10Questions.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="hq-${idx}"]:checked`);
+                const userAns = selected ? parseInt(selected.value) : -1;
+                const isCorrect = userAns === q.ans;
+
+                if (isCorrect) correctCount++;
+
+                discussionHtml += `
+                    <div class="p-3.5 rounded-2xl border ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-red-950/40 border-red-500/50'}">
+                        <div class="font-bold ${isCorrect ? 'text-emerald-400' : 'text-red-400'} mb-1">
+                            Soal #${idx + 1}: ${isCorrect ? 'BENAR ✅' : 'KURANG TEPAT ❌'}
+                        </div>
+                        <p class="text-[11px] text-slate-300 mb-1"><b>Kunci Jawaban:</b> ${q.opts[q.ans]}</p>
+                        <p class="text-[11px] text-amber-200/90 italic"><b>Pembahasan:</b> ${q.exp}</p>
+                    </div>
+                `;
+            });
+
+            const score = Math.round((correctCount / hots10Questions.length) * 100);
+            document.getElementById('quiz-score-val').innerText = `${score} / 100`;
+            document.getElementById('quiz-discussion').innerHTML = discussionHtml;
+
+            let feedbackText = "";
+            if (score >= 80) {
+                feedbackText = "Luar Biasa! Kamu memiliki daya nalar kritis dan pemahaman etika reporter yang sangat hebat!";
+            } else if (score >= 60) {
+                feedbackText = "Bagus! Kamu sudah memahami konsep dasar wawancara. Tingkatkan terus analisis kritis kamu!";
+            } else {
+                feedbackText = "Jangan berkecil hati. Pelajari kembali materi wawancara dan etika reporter di modul LENTERA lalu coba lagi!";
+            }
+            document.getElementById('quiz-feedback').innerText = feedbackText;
+
+            document.getElementById('quiz-result').classList.remove('hidden');
+            window.scrollTo({ top: document.getElementById('quiz-result').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-result').classList.add('hidden');
+            renderQuiz();
+            window.scrollTo({ top: document.getElementById('sec-kuis').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        /* ----------------------------------------------------
+           7. REFLEKSI MOOD
+        ---------------------------------------------------- */
+        function setReflectionMood(moodText) {
+            showModal('Refleksi Terkirim', `Terima kasih! Kamu merasa [${moodText}] setelah belajar bersama LENTERA.`, 'fa-face-smile', 'bg-amber-100 text-amber-700');
+        }
+
+        /* Initial Setup on Page Load */
+        window.onload = function() {
+            // Populate initial dynamic LKPD rows
+            addQnAItem();
+            addQnAItem();
+            // Render 10 HOTS questions
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
